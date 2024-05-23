@@ -1,0 +1,262 @@
+openapi: 3.0.0
+info:
+  title: |
+    API BOOK STORE
+  description: | 
+      ### ***About this Project***
+        _Creating a comprehensive OpenAPI specification for a Bookstore API. The API will manage `books, authors, and orders` enabling CRUD operations and user authentication_
+  contact: 
+    name: API bookstore
+    url: https://www.bookstore.com
+    email: balajiprasanth10@gmail.com
+  termsOfService: https://www.bookstoreapi.com
+  version: 10.0.0
+servers: 
+  - url: www.bookstore.com
+    description: |
+      Books Management,
+      Authors,
+      Orders, 
+      User Authentication
+paths: 
+  /books:
+    get:
+      summary: Fetch all the books
+      description: All the books are listed
+      security: 
+        - oauth:
+            - read
+            - write
+            - admin
+      tags: 
+        - Book Management
+      responses: 
+        "200":
+            description: All the books are Listed
+            content:
+              application/JSON:
+                schema:
+                  $ref: '#/components/schemas/200responce'
+        "500":
+            description: Internal Server error
+    
+    post: 
+      summary: Create new book
+      description: Creating new book to the library
+      tags: 
+        - Book Management
+      requestBody: 
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/200responce'
+      responses: 
+        "200":
+          description: Book is created
+        
+        "500":
+          description: Internal Server error    
+          
+    
+  /books/{BookID}:
+    get: 
+      summary: Fetch the book with bookid
+      description: book details listed
+      tags: 
+        - Book Management
+      parameters:
+        - $ref: '#/components/parameters/bookidparam'
+      responses: 
+        "200":
+          description: Book details listed
+          content:
+            application/JSON:
+              schema:
+                $ref: '#/components/schemas/200responce'
+        "500":
+          description: Internal Server error
+    
+    delete: 
+      summary: delete the book with bookid
+      description: Book with entered bookid will be deleted
+      security: 
+        - oauth:
+            - read
+            - write
+            - admin
+      tags:
+        - Book Management
+      parameters: 
+        - $ref: '#/components/parameters/bookidparam'
+      responses: 
+        "200":
+          description: Deleted book details listed and its deleted from DB
+          content:
+            application/JSON:
+              schema:
+                $ref: '#/components/schemas/200responce'
+        "500":
+          description: Internal Server error
+    put: 
+      summary: update the book
+      description: updating book details to the library
+      security: 
+        - oauth:
+            - read
+            - write
+            - admin
+      tags: 
+        - Book Management
+      parameters: 
+        - $ref: '#/components/parameters/bookidparam'
+      requestBody: 
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/200responce'
+            
+      responses: 
+        "200":
+          description: Book is updated
+        
+        "500":
+          description: Internal Server error   
+  /authors/{authorid}/books/{BookID}:
+    get: 
+      summary: Fetch the book with author
+      description: book details listed
+      tags: 
+        - Author Management
+      parameters:
+        - $ref: '#/components/parameters/authoridparam'
+        - $ref: '#/components/parameters/bookidparam'
+      responses: 
+        "200":
+          description: author details listed
+          content:
+            application/JSON:
+              schema:
+                $ref: '#/components/schemas/200responce'
+        "500":
+          description: Internal Server error
+          
+    delete: 
+      summary: delete the book with authorid and bookid
+      description: author's books with entered authorid and bookid will be deleted
+      security: 
+        - oauth:
+            - read
+            - write
+            - admin
+      tags:
+        - Author Management
+      parameters: 
+        - $ref: '#/components/parameters/authoridparam'
+        - $ref: '#/components/parameters/bookidparam'
+      responses: 
+        "200":
+          description: Deleted author's book details listed and its deleted from DB
+          content:
+            application/JSON:
+              schema:
+                $ref: '#/components/schemas/200responce'
+        "500":
+          description: Internal Server error
+          
+    post: 
+      summary: Create new book author
+      description: Creating new author to the library
+      tags: 
+        - Author Management
+      parameters: 
+        - $ref: '#/components/parameters/authoridparam'
+        - $ref: '#/components/parameters/bookidparam'
+      requestBody: 
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/200responce'
+      responses: 
+        "200":
+          description: Book is created
+        
+        "500":
+          description: Internal Server error
+          
+    put:
+      summary: update the book author
+      description: updating author details to the library
+      security: 
+        - oauth:
+            - read
+            - write
+            - admin
+      tags: 
+        - Author Management
+      parameters:
+        - $ref: '#/components/parameters/authoridparam'
+        - $ref: '#/components/parameters/bookidparam'
+      requestBody: 
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: 
+                Bookid:
+                  type: integer
+                Authorid: 
+                  type: integer
+      responses: 
+        "200":
+          description: Book is updated
+        
+        "500":
+          description: Internal Server error 
+      
+      
+components: 
+  securitySchemes:
+    oauth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://www.bookatoreAPP.in/
+          tokenUrl: https://www.bookstoreauth.in/
+          scopes:
+            read: read
+            write: write
+            admin: admin
+  parameters: 
+    bookidparam:
+          name: BookID
+          description: Enter the BookID
+          in: path
+          schema: 
+           type: integer
+          example: 101
+          required: true
+    authoridparam: 
+          name: authorid
+          description: Enter the authorid
+          in: path
+          schema: 
+           type: integer
+          example: 101
+          required: true
+  schemas: 
+    200responce:
+        type: object
+        properties:
+          Bookname:
+            type: string
+          Authorname:
+            type: string
+          Authorid:
+              type: integer
+          BookID:
+            type: integer
+
+
+      
+  
+    
